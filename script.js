@@ -210,55 +210,7 @@ function renderWorkers() {
         };
         const cancelWPress = () => { clearTimeout(wPressTimer); };
 
-        workerEl.onmousedown = startWPress;
-        workerEl.onmouseup = cancelWPress;
-        workerEl.onmouseleave = cancelWPress;
-        workerEl.ontouchstart = startWPress;
-        workerEl.ontouchend = (e) => {
-            const pillBtn = e.target.closest('.pill');
-            if (pillBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                const timeOfDay = pillBtn.getAttribute('data-time');
-                toggleAttendance(worker.id, timeOfDay);
-                return;
-            }
-            cancelWPress();
-        };
-        workerEl.ontouchmove = cancelWPress;
-
-        workerEl.addEventListener('touchend', (e) => {
-            const pillBtn = e.target.closest('.pill');
-            if (pillBtn) {
-                e.preventDefault();
-                e.stopPropagation();
-                const timeOfDay = pillBtn.getAttribute('data-time');
-                toggleAttendance(worker.id, timeOfDay);
-            }
-        });
-
-        workerEl.onclick = (e) => {
-            cancelWPress();
-            
-            const pillBtn = e.target.closest('.pill');
-            if (pillBtn) {
-                const timeOfDay = pillBtn.getAttribute('data-time');
-                toggleAttendance(worker.id, timeOfDay);
-                return;
-            }
-
-            if(!wIsLongPress) {
-                if (selectedWorkerId === worker.id) {
-                    selectedWorkerId = null;
-                } else {
-                    selectedWorkerId = worker.id;
-                }
-                renderCalendar(); 
-                renderWorkers(); 
-            }
-        };
-
-        workerEl.innerHTML = `
+                workerEl.innerHTML = `
             <div class="worker-info">
                 <div class="color-bar" style="background-color: ${worker.color}"></div>
                 <div class="w-name">${worker.name}</div>
@@ -271,6 +223,40 @@ function renderWorkers() {
                 </div>
             </div>
         `;
+
+        workerEl.querySelectorAll('.pill').forEach(pillBtn => {
+            pillBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleAttendance(worker.id, pillBtn.getAttribute('data-time'));
+            });
+            pillBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleAttendance(worker.id, pillBtn.getAttribute('data-time'));
+            });
+        });
+
+        workerEl.onmousedown = startWPress;
+        workerEl.onmouseup = cancelWPress;
+        workerEl.onmouseleave = cancelWPress;
+        workerEl.ontouchstart = startWPress;
+        workerEl.ontouchend = cancelWPress;
+        workerEl.ontouchmove = cancelWPress;
+
+        workerEl.onclick = (e) => {
+            if (e.target.closest('.pill')) return;
+            cancelWPress();
+            if (!wIsLongPress) {
+                if (selectedWorkerId === worker.id) {
+                    selectedWorkerId = null;
+                } else {
+                    selectedWorkerId = worker.id;
+                }
+                renderCalendar();
+                renderWorkers();
+            }
+        };
+
         workerList.appendChild(workerEl);
     });
 }
