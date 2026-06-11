@@ -217,18 +217,26 @@ function renderWorkers() {
         workerEl.ontouchend = cancelWPress;
         workerEl.ontouchmove = cancelWPress;
 
+        workerEl.addEventListener('touchend', (e) => {
+            const pillBtn = e.target.closest('.pill');
+            if (pillBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const timeOfDay = pillBtn.getAttribute('data-time');
+                toggleAttendance(worker.id, timeOfDay);
+            }
+        });
+
         workerEl.onclick = (e) => {
             cancelWPress();
             
-            // ၁။ ဖုန်း Touch စနစ်တွင် ပိုမိုတိကျစေရန် Button ခလုတ်ကို ဖမ်းယူခြင်း
             const pillBtn = e.target.closest('.pill');
             if (pillBtn) {
                 const timeOfDay = pillBtn.getAttribute('data-time');
                 toggleAttendance(worker.id, timeOfDay);
-                return; // အောက်က Select လုပ်သည့်အဆင့်သို့ ဆက်မသွားရန် တားဆီးခြင်း
+                return;
             }
 
-            // ၂။ ပုံမှန်နှိပ်ပါက (အလုပ်သမားကို Select / Deselect လုပ်မည်)
             if(!wIsLongPress) {
                 if (selectedWorkerId === worker.id) {
                     selectedWorkerId = null;
