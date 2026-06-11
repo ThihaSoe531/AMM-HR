@@ -214,7 +214,17 @@ function renderWorkers() {
         workerEl.onmouseup = cancelWPress;
         workerEl.onmouseleave = cancelWPress;
         workerEl.ontouchstart = startWPress;
-        workerEl.ontouchend = cancelWPress;
+        workerEl.ontouchend = (e) => {
+            const pillBtn = e.target.closest('.pill');
+            if (pillBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const timeOfDay = pillBtn.getAttribute('data-time');
+                toggleAttendance(worker.id, timeOfDay);
+                return;
+            }
+            cancelWPress();
+        };
         workerEl.ontouchmove = cancelWPress;
 
         workerEl.addEventListener('touchend', (e) => {
