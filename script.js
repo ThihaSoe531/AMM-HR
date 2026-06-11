@@ -219,15 +219,23 @@ function renderWorkers() {
 
         workerEl.onclick = (e) => {
             cancelWPress();
-            if(!e.target.classList.contains('pill') && !wIsLongPress) {
-                // ရွေးထားပြီးသားသူကို ထပ်နှိပ်ပါက ရွေးချယ်မှုဖြုတ်မည် (Deselect)
+            
+            // ၁။ အရောင်အတုံးလေး (Pill) ကို နှိပ်ပါက အလုပ်ဆင်းမှတ်တမ်း ထည့်မည်
+            if (e.target.classList.contains('pill')) {
+                const timeOfDay = e.target.getAttribute('data-time');
+                toggleAttendance(worker.id, timeOfDay);
+                return; // အောက်က Select လုပ်တဲ့အဆင့်ကို ဆက်မသွားအောင် တားမည်
+            }
+
+            // ၂။ ပုံမှန်နှိပ်ပါက (အလုပ်သမားကို Select / Deselect လုပ်မည်)
+            if(!wIsLongPress) {
                 if (selectedWorkerId === worker.id) {
                     selectedWorkerId = null;
                 } else {
                     selectedWorkerId = worker.id;
                 }
                 renderCalendar(); 
-                renderWorkers(); // အရောင်ပြောင်းသွားစေရန် List ကို Refresh ပြန်လုပ်မည်
+                renderWorkers(); 
             }
         };
 
@@ -239,8 +247,8 @@ function renderWorkers() {
             <div class="attendance-toggles">
                 <div class="w-wage">${worker.wage} ks</div>
                 <div class="pills">
-                    <div class="pill ${isMorning ? 'active' : ''}" style="--active-color: ${worker.color}" onclick="toggleAttendance(event, ${worker.id}, 'morning')"></div>
-                    <div class="pill ${isEvening ? 'active' : ''}" style="--active-color: ${worker.color}" onclick="toggleAttendance(event, ${worker.id}, 'evening')"></div>
+                    <div class="pill ${isMorning ? 'active' : ''}" style="--active-color: ${worker.color}" data-time="morning"></div>
+                    <div class="pill ${isEvening ? 'active' : ''}" style="--active-color: ${worker.color}" data-time="evening"></div>
                 </div>
             </div>
         `;
@@ -249,10 +257,7 @@ function renderWorkers() {
 }
 
 // Toggle Attendance (Morning / Evening)
-window.toggleAttendance = function(event, workerId, timeOfDay) {
-    // ဖုန်း Touch ဖြင့်နှိပ်ရာတွင် အခြားလုပ်ဆောင်ချက်များ ရောထွေးမသွားစေရန် တားဆီးခြင်း
-    if (event) event.stopPropagation();
-
+window.toggleAttendance = function(workerId, timeOfDay) {
     // အနာဂတ်ရက်စွဲများကို တားဆီးခြင်း
     const parts = selectedDateKey.split('-');
     const selectedDateObj = new Date(parts[0], parts[1] - 1, parts[2]);
