@@ -190,7 +190,10 @@ function renderWorkers() {
         let wPressTimer;
         let wIsLongPress = false;
         
-        const startWPress = () => { 
+        const startWPress = (e) => { 
+            // အရောင်အတုံးလေး (Pill) ကို နှိပ်ခြင်းဖြစ်ပါက Long Press စနစ်ကို လုံးဝ မလုပ်ဆောင်စေရန် တားမည်
+            if (e && e.target && e.target.classList.contains('pill')) return;
+
             wIsLongPress = false; 
             wPressTimer = window.setTimeout(() => { 
                 wIsLongPress = true; 
@@ -236,8 +239,8 @@ function renderWorkers() {
             <div class="attendance-toggles">
                 <div class="w-wage">${worker.wage} ks</div>
                 <div class="pills">
-                    <div class="pill ${isMorning ? 'active' : ''}" style="--active-color: ${worker.color}" onclick="toggleAttendance(${worker.id}, 'morning')"></div>
-                    <div class="pill ${isEvening ? 'active' : ''}" style="--active-color: ${worker.color}" onclick="toggleAttendance(${worker.id}, 'evening')"></div>
+                    <div class="pill ${isMorning ? 'active' : ''}" style="--active-color: ${worker.color}" onclick="toggleAttendance(event, ${worker.id}, 'morning')"></div>
+                    <div class="pill ${isEvening ? 'active' : ''}" style="--active-color: ${worker.color}" onclick="toggleAttendance(event, ${worker.id}, 'evening')"></div>
                 </div>
             </div>
         `;
@@ -246,7 +249,10 @@ function renderWorkers() {
 }
 
 // Toggle Attendance (Morning / Evening)
-window.toggleAttendance = function(workerId, timeOfDay) {
+window.toggleAttendance = function(event, workerId, timeOfDay) {
+    // ဖုန်း Touch ဖြင့်နှိပ်ရာတွင် အခြားလုပ်ဆောင်ချက်များ ရောထွေးမသွားစေရန် တားဆီးခြင်း
+    if (event) event.stopPropagation();
+
     // အနာဂတ်ရက်စွဲများကို တားဆီးခြင်း
     const parts = selectedDateKey.split('-');
     const selectedDateObj = new Date(parts[0], parts[1] - 1, parts[2]);
