@@ -1,0 +1,17 @@
+{
+  "name": "AMM HR & Payroll",
+  "short_name": "AMM HR",
+  "description": "HR and Payroll Management Application",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#1a2b3c",
+  "theme_color": "#1a2b3c",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

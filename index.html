@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AMM HR</title>
+    
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="theme-color" content="#1a2b3c">
+    
+    <link rel="apple-touch-icon" href="icon.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="AMM HR">
+    
+    <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="business-header">
+    <div class="biz-title">Aung Myint Myat</div>
+    <div class="biz-subtitle">Home Decor & Furnishings</div>
+</div>
+        <div class="calendar-header">
+            <button id="prevMonth">&#10094;</button>
+            <h2 id="monthYear">June 2026</h2>
+            <button id="nextMonth">&#10095;</button>
+        </div>
+        <div class="weekdays">
+            <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+        </div>
+        <div class="calendar-grid" id="calendar">
+            </div>
+
+        <div class="worker-panel" id="workerPanel">
+            <div class="panel-header" id="handleBar" style="cursor: pointer;">
+                <div class="handle-bar"></div>
+                <span>Date: <span id="currentDateStr"></span></span>
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <button id="setAlarmBtn" style="background: #28a745; color: white; border: none; padding: 12px; border-radius: 10px; cursor: pointer; font-size: 14px; width: 100%; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">🔔 ဤရက်အတွက် Alarm ပေးမည်</button>
+            </div>
+
+            <div class="worker-list" id="workerList">
+                </div>
+
+            <button class="add-btn" id="addWorkerBtn">+</button>
+        </div>
+    </div>
+
+    <div id="workerModal" class="modal">
+        <div class="modal-content">
+            <h3>အလုပ်သမားအသစ် ထည့်ရန်</h3>
+            <div class="form-group">
+                <label>အမည်</label>
+                <input type="text" id="wName" placeholder="အမည်ရိုက်ထည့်ပါ">
+            </div>
+            <div class="form-group">
+                <label>တစ်ရက်လုပ်အားခ (ကျပ်)</label>
+                <input type="number" id="wWage" placeholder="ဥပမာ - ၂၀၀၀၀">
+            </div>
+            <div class="form-group">
+                <label>မနက်ပိုင်း လုပ်အားခ (ရွေးချယ်ရန်)</label>
+                <input type="number" id="wMorningWage" placeholder="မထည့်ပါက တစ်ဝက်ခွဲတွက်မည်">
+            </div>
+            <div class="form-group">
+                <label>ညနေပိုင်း လုပ်အားခ (ရွေးချယ်ရန်)</label>
+                <input type="number" id="wEveningWage" placeholder="မထည့်ပါက တစ်ဝက်ခွဲတွက်မည်">
+            </div>
+            <div class="form-group">
+                <label>အရောင်ရွေးချယ်ရန်</label>
+                <input type="color" id="wColor" value="#ff0044">
+            </div>
+            <div class="modal-actions">
+                <button id="deleteBtn" class="delete" style="display: none; margin-right: auto;">ဖျက်မည်</button>
+                <button id="cancelBtn" class="cancel">ပယ်ဖျက်မည်</button>
+                <button id="saveBtn" class="save">သိမ်းမည်</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="payrollModal" class="modal">
+        <div class="modal-content" style="height: auto; max-height: 85vh; overflow-y: auto;">
+            <h3 id="payrollTitle" style="text-align: center; font-size: 18px;"></h3>
+            
+            <div id="payrollWorkerList" style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;"></div>
+            
+            <div id="payrollDetail" style="display: none; margin-top: 10px;"></div>
+            
+            <div class="modal-actions" style="margin-top: 30px;">
+                <button id="closePayrollBtn" class="cancel" style="width: 100%;">ပိတ်မည်</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="alarmModal" class="modal">
+        <div class="modal-content" style="height: auto; max-height: 40vh;">
+            <h3 style="text-align: center; color: #1a2b3c; margin-bottom: 20px;">Alarm အချိန် သတ်မှတ်ရန်</h3>
+            <div class="form-group">
+                <label>မည်သည့်အချိန်တွင် သတိပေးရမည်လဲ?</label>
+                <input type="time" id="alarmTimeInput" value="09:00" style="padding: 15px; font-size: 18px; text-align: center; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px;">
+                
+                <label>သတိပေးရမည့် အကြောင်းအရာ (ရွေးချယ်ရန်)</label>
+                <input type="text" id="alarmNoteInput" placeholder="ဘာမှမရေးပါက 'လုပ်အားခ ရှင်းရန်' ဟု သတ်မှတ်မည်" style="padding: 12px; font-size: 14px; border: 1px solid #ccc; border-radius: 8px; width: 100%; box-sizing: border-box;">
+            </div>
+            <div class="modal-actions" style="margin-top: 30px;">
+                <button id="deleteAlarmBtn" class="delete" style="display: none; margin-right: auto;">ဖျက်မည်</button>
+                <button id="cancelAlarmBtn" class="cancel">ပယ်ဖျက်မည်</button>
+                <button id="saveAlarmBtn" class="save" style="background: #28a745;">အတည်ပြုမည်</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
