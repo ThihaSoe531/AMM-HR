@@ -276,6 +276,7 @@ window.toggleAttendance = function(workerId, timeOfDay) {
 
     if (!attendance[selectedDateKey]) attendance[selectedDateKey] = {};
     
+    if (!attendance[selectedDateKey][workerId]) attendance[selectedDateKey][workerId] = {};
     attendance[selectedDateKey][workerId][timeOfDay] = !attendance[selectedDateKey][workerId][timeOfDay];
     
     // Save to Local Storage
