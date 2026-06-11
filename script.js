@@ -220,11 +220,12 @@ function renderWorkers() {
         workerEl.onclick = (e) => {
             cancelWPress();
             
-            // ၁။ အရောင်အတုံးလေး (Pill) ကို နှိပ်ပါက အလုပ်ဆင်းမှတ်တမ်း ထည့်မည်
-            if (e.target.classList.contains('pill')) {
-                const timeOfDay = e.target.getAttribute('data-time');
+            // ၁။ ဖုန်း Touch စနစ်တွင် ပိုမိုတိကျစေရန် Button ခလုတ်ကို ဖမ်းယူခြင်း
+            const pillBtn = e.target.closest('.pill');
+            if (pillBtn) {
+                const timeOfDay = pillBtn.getAttribute('data-time');
                 toggleAttendance(worker.id, timeOfDay);
-                return; // အောက်က Select လုပ်တဲ့အဆင့်ကို ဆက်မသွားအောင် တားမည်
+                return; // အောက်က Select လုပ်သည့်အဆင့်သို့ ဆက်မသွားရန် တားဆီးခြင်း
             }
 
             // ၂။ ပုံမှန်နှိပ်ပါက (အလုပ်သမားကို Select / Deselect လုပ်မည်)
@@ -247,8 +248,8 @@ function renderWorkers() {
             <div class="attendance-toggles">
                 <div class="w-wage">${worker.wage} ks</div>
                 <div class="pills">
-                    <div class="pill ${isMorning ? 'active' : ''}" style="--active-color: ${worker.color}" data-time="morning"></div>
-                    <div class="pill ${isEvening ? 'active' : ''}" style="--active-color: ${worker.color}" data-time="evening"></div>
+                    <button class="pill ${isMorning ? 'active' : ''}" style="--active-color: ${worker.color}" data-time="morning" type="button"></button>
+                    <button class="pill ${isEvening ? 'active' : ''}" style="--active-color: ${worker.color}" data-time="evening" type="button"></button>
                 </div>
             </div>
         `;
