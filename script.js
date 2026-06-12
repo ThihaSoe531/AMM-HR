@@ -60,9 +60,12 @@ function renderCalendar() {
 
         // ရက်စွဲ ဂဏန်းကို အကြီးစားဖြင့် ဖော်ပြခြင်း
         dayDiv.innerHTML = `
-            <div style="display: flex; justify-content: flex-end; align-items: center; width: 100%; z-index: 1;">
-                ${moonIcon}
-                <span style="font-size: 18px; font-weight: 900; letter-spacing: -0.5px;">${i}</span>
+            <div style="display: flex; flex-direction: column; align-items: flex-end; width: 100%;">
+                <div style="display: flex; justify-content: flex-end; align-items: center; width: 100%;">
+                    ${moonIcon}
+                    <span style="font-size: 18px; font-weight: 900; letter-spacing: -0.5px;">${i}</span>
+                </div>
+                <div id="alarm-slot-${dateKey}"></div>
             </div>
         `;
 
