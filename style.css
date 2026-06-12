@@ -94,7 +94,8 @@ body { background-color: #2c2c2c; display: flex; justify-content: center; align-
 
 .biz-subtitle {
     font-size: 13px;
-    font-weight: normal; /* စာလုံးပုံမှန် (Normal) */
-    color: #a0aab5; /* ခေါင်းစဉ်ထက် စာလုံးပိုသေးပြီး အနည်းငယ်မှိန်သော ခဲရောင်ဖျော့ */
+    font-weight: normal;
+    color: #a0aab5;
     letter-spacing: 0.3px;
+    margin-left: 6px;
 }
